@@ -3,20 +3,18 @@ FROM debian:buster-slim
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-        isc-dhcp-server \
-        tftpd-hpa && \
-    # Clean rootfs
-    apt-get clean all && \
-    apt-get autoremove -y && \
-    apt-get purge && \
-    rm -rf /var/lib/{apt,dpkg,cache,log} && \
-    # Configure DHCP
-    touch /var/lib/dhcp/dhcpd.leases && \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+     isc-dhcp-server \
+     tftpd-hpa \
+    && apt-get clean all \
+    && apt-get autoremove -y \
+    && apt-get purge \
+    && rm -rf /var/lib/{apt,dpkg,cache,log} \
+    && touch /var/lib/dhcp/dhcpd.leases 
 
 # Export the DHCP/TFTP server ports
-EXPOSE 67/tcp \ 
+EXPOSE 67/tcp \
        67/udp \
        69/udp
 
